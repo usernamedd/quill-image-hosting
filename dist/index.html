@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet" />
+    <link href="./image.host.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="toolbar">
+        <button class="ql-bold">Bold</button>
+        <button class="ql-italic">Italic</button>
+        <span class="ql-formats d-block">
+            <select class="ql-font"></select>
+            <select class="ql-size"></select>
+        </span>
+
+        <span class="ql-formats d-block">
+            <button class="ql-image"></button>
+        </span>
+    </div>
+
+
+    <!-- Create the editor container -->
+    <div id="editor">
+        <p>Hello World!</p>
+    </div>
+    <!-- <script src="./quill.bundle.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+    <script src="./main.bundle.js"></script>
+    <script>
+        Quill.register('modules/ImageHost', ImageHost);
+        // const ddd4 = new imageFormatter.dddd4();
+
+        // ddd4.hello();
+        var editor = new Quill('#editor', {
+            modules: {
+                toolbar: {
+                    container: '#toolbar', // Selector for toolbar container
+                    // handlers: {
+                    //     image: imageFormatter.ImageFormatter
+                    // }
+                },
+                ImageHost:{}
+            },
+            theme: 'snow',
+        });
+    </script>
+</body>
+
+</html>
