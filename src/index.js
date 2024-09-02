@@ -33,42 +33,65 @@ class ImageHost {
         this.#replaceImageHandler();
         this.#InitUrlInputDialog();
     }
-    #replaceImageHandler(){
+    #replaceImageHandler() {
         const toolbar = this.quillLocal.getModule('toolbar');
-        toolbar.addHandler('image', ()=>{this.ImageFormatter.call(this)});
+        toolbar.addHandler('image', () => { this.ImageFormatter.call(this) });
     }
-    #localModeHandler(){
+    #localModeHandler() {
         // alert('local');
         // let button_close = document.getElementById("close_mode_selection_dalog");
         // button_close.click();
         this.#showOrHideModeSelectionDialog(false);
 
-        // let fileInput = this.quillLocal.container.querySelector(
-        //     'input.ql-image[type=file]',
-        //   );
-        //   if (fileInput == null) {
-        //     fileInput = document.createElement('input');
-        //     fileInput.setAttribute('type', 'file');
-        //     fileInput.setAttribute('style', 'display:none;');
-        //     fileInput.setAttribute(
-        //       'accept',
-        //       this.quillLocal.uploader.options.mimetypes.join(', '),
-        //     );
-        //     fileInput.classList.add('ql-image');
-        //     fileInput.addEventListener('change', () => {
-        //       const range = this.quillLocal.getSelection(true);
-        //       this.quillLocal.uploader.upload(range, fileInput.files);
-        //       fileInput.value = '';
-        //     });
-        //     this.quillLocal.container.appendChild(fileInput);
-        //   }
-        //   fileInput.click();
+        let fileInput = this.quillLocal.container.querySelector(
+            'input.ql-image[type=file]',
+        );
+        if (fileInput == null) {
+            fileInput = document.createElement('input');
+            fileInput.setAttribute('type', 'file');
+            fileInput.setAttribute('style', 'display:none;');
+            fileInput.setAttribute(
+                'accept',
+                this.quillLocal.uploader.options.mimetypes.join(', '),
+            );
+            fileInput.classList.add('ql-image');
+            fileInput.addEventListener('change', () => {
+                const range = this.quillLocal.getSelection(true);
+                this.quillLocal.uploader.upload(range, fileInput.files);
+
+                fileInput.value = '';
+                this.#uploadLocalFiles(fileInput.files[0]);
+
+            });
+            this.quillLocal.container.appendChild(fileInput);
+        }
+        fileInput.click();
     }
-    #ImageHostModeHandler(){
+    async #uploadLocalFiles(file) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch('https://postimage.org/upload', {
+                method: 'GET',
+                // body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            document.getElementById('result').innerHTML = `<a href="${data.url}">Image uploaded! Click here to view.</a>`;
+        } catch (error) {
+            console.error('Error uploading image:', error);
+        }
+    }
+    #ImageHostModeHandler() {
         this.#showOrHideModeSelectionDialog(false);
         this.#ShowOrHideUrlInputDialog(true);
     }
-    #submitUrl(){
+    #submitUrl() {
         ////检查URL合法性
         //关闭URLInputDialog
         this.#ShowOrHideUrlInputDialog(false);
@@ -79,23 +102,23 @@ class ImageHost {
         // this.quillLocal.updateContents(update, Quill.sources.USER);
         this.quillLocal.insertEmbed(range.index, 'image', value, Quill.sources.USER);
         this.quillLocal.setSelection(
-          range.index+1,
-          Quill.sources.USER,
+            range.index + 1,
+            Quill.sources.USER,
         );
         // this.quillLocal.insertEmbed(range.index, 'image', value, Quill.sources.USER);
     }
-    #createModeDialog(){
+    #createModeDialog() {
         const modeDialog = [
             '<dialog id="my_modal_3" class="modal" open>',
-                '<div class="modal-box">',
-                    '<form method="dialog">',
-                        '<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" id="close_mode_selection_dalog">✕</button>',
-                    '</form>',
-                    '<h3 class="text-lg font-bold">Hello!</h3>',
-                    '<p class="py-4">Press ESC key or click on ✕ button to close</p>',
-                    '<button class="btn btn-outline btn-info btn-wide" id="local_mode">Info</button>',
-                    '<button class="btn btn-outline btn-success btn-wide" id="image_host">Success</button>',
-                '</div>',
+            '<div class="modal-box">',
+            '<form method="dialog">',
+            '<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" id="close_mode_selection_dalog">✕</button>',
+            '</form>',
+            '<h3 class="text-lg font-bold">Hello!</h3>',
+            '<p class="py-4">Press ESC key or click on ✕ button to close</p>',
+            '<button class="btn btn-outline btn-info btn-wide" id="local_mode">Info</button>',
+            '<button class="btn btn-outline btn-success btn-wide" id="image_host">Success</button>',
+            '</div>',
             '</dialog >',
         ].join('');
         // alert('ddd')
@@ -111,21 +134,21 @@ class ImageHost {
             //binding image host button click ot handler
             const hostButton = document.getElementById('image_host');
             hostButton.addEventListener('click', this.#ImageHostModeHandler.bind(this));
-        }else{
+        } else {
             this.#showOrHideModeSelectionDialog(true);
         }
     }
     ImageFormatter() {
         this.#createModeDialog();
     }
-    #urlInputChangedHandler(event){
+    #urlInputChangedHandler(event) {
         this.url = event.target.value; // Update variable on input change
     }
     /**
      * 初始化输入url对话框
      */
-    #InitUrlInputDialog(){
-        const urlDialog=`
+    #InitUrlInputDialog() {
+        const urlDialog = `
         <dialog id="modal_url_input" class="modal hidden" open>
             <div class="p-4 bg-gray-100 rounded-lg shadow-md flex flex-col">
                 <span class="block text-lg font-semibold text-gray-800 mb-4">input url</span>
@@ -141,26 +164,26 @@ class ImageHost {
         const dialogContainer = document.createElement('div');
         this.quillLocal.container.appendChild(dialogContainer);
         dialogContainer.innerHTML = urlDialog;
-        document.getElementById("submit_url").addEventListener("click",this.#submitUrl.bind(this));
+        document.getElementById("submit_url").addEventListener("click", this.#submitUrl.bind(this));
         //binding url_input
-        const self=this;
-        document.getElementById('url_input').addEventListener("input",(e)=>{self.#urlInputChangedHandler(e);});
+        const self = this;
+        document.getElementById('url_input').addEventListener("input", (e) => { self.#urlInputChangedHandler(e); });
     }
-    #showOrHideModeSelectionDialog(show){
-        if (show===true) {
+    #showOrHideModeSelectionDialog(show) {
+        if (show === true) {
             document.getElementById('my_modal_3').classList.remove('hidden');
-        }else{
+        } else {
             document.getElementById('my_modal_3').classList.add('hidden');
         }
     }
-    #ShowOrHideUrlInputDialog(control){
-        if (control===true) {
+    #ShowOrHideUrlInputDialog(control) {
+        if (control === true) {
             modal_url_input.classList.remove('hidden');
-        }else{
+        } else {
             modal_url_input.classList.add('hidden');
         }
     }
-    #IsUrlInputDialogShown(){
+    #IsUrlInputDialogShown() {
         const dialog = document.getElementById('modal_url_input');
         return !dialog.classList.contains('hidden');
     }
