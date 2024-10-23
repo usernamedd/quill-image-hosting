@@ -40,7 +40,8 @@ class ImageHost {
         const toolbar = this.quillLocal.getModule('toolbar');
         toolbar.addHandler('image', () => { this.ImageFormatter.call(this) });
     }
-    #localModeHandler() {
+    #localModeHandler(e) {
+        e.preventDefault();
         // alert('local');
         // let button_close = document.getElementById("close_mode_selection_dalog");
         // button_close.click();
@@ -90,11 +91,13 @@ class ImageHost {
             console.error('Error uploading image:', error);
         }
     }
-    #ImageHostModeHandler() {
+    #ImageHostModeHandler(e) {
+        e.preventDefault();
         this.#showOrHideModeSelectionDialog(false);
         this.#ShowOrHideUrlInputDialog(true);
     }
-    #submitUrl() {
+    #submitUrl(e) {
+        e.preventDefault();
         ////检查URL合法性
         //关闭URLInputDialog
         this.#ShowOrHideUrlInputDialog(false);
@@ -156,6 +159,7 @@ class ImageHost {
         this.#createModeDialog();
     }
     #urlInputChangedHandler(event) {
+        event.preventDefault();
         this.url = event.target.value; // Update variable on input change
     }
     /**
