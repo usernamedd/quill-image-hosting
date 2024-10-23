@@ -12,3 +12,22 @@ insert image from an image hosting or local file
 > 试验：得到模式选择对话框模板。包括css,html元素。html元素已经存在，需要得到CSS
 >   使用一个html文件，放置css class,用于让tailwind生成目标css,使用另一个css--input.css作为tailwind的输入css
 > 试验：超链接输入对话框模板
+
+# deploy
+部署示例
+```javascript
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+<script src="./main.bundle.js"></script> //import module
+<script>
+    Quill.register('modules/ImageHost', ImageHost);//register module
+    var editor = new Quill('#editor', {
+        modules: {
+            toolbar: {
+                container: '#toolbar', // Selector for toolbar container
+            },
+            ImageHost:{}//use module withoud options for the module
+        },
+        theme: 'snow',
+    });
+</script>
+```
