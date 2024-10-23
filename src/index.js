@@ -28,6 +28,7 @@ class ImageHost {
     option_Local;
     url;
     my_modal_3;
+    modal_url_input;//图片URL输入对话框
     constructor(quill, option) {
         this.quillLocal = quill;
         this.optionLocal = option;
@@ -191,6 +192,8 @@ class ImageHost {
         //binding url_input
         const self = this;
         document.getElementById('url_input').addEventListener("input", (e) => { self.#urlInputChangedHandler(e); });
+        //cache
+        modal_url_input=new bootstrap.Modal(document.getElementById('modal_url_input'));
     }
     #showOrHideModeSelectionDialog(show) {
         if (show === true) {
@@ -201,9 +204,9 @@ class ImageHost {
     }
     #ShowOrHideUrlInputDialog(control) {
         if (control === true) {
-            modal_url_input.classList.remove('hidden');
+            modal_url_input.show();
         } else {
-            modal_url_input.classList.add('hidden');
+            modal_url_input.hide();
         }
     }
     #IsUrlInputDialogShown() {

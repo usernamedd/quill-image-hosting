@@ -16,6 +16,8 @@ insert image from an image hosting or local file
 # deploy
 部署示例
 ```javascript
+//对bootstrap的引用要放到引用main.bundle.js之前，因为在main.bundle.js构造中会使用bootstrap
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
 <script src="./main.bundle.js"></script> //import module
 <script>
