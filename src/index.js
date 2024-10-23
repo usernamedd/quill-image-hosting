@@ -27,6 +27,7 @@ class ImageHost {
     quillLocal;
     option_Local;
     url;
+    my_modal_3;
     constructor(quill, option) {
         this.quillLocal = quill;
         this.optionLocal = option;
@@ -109,16 +110,24 @@ class ImageHost {
     }
     #createModeDialog() {
         const modeDialog = [
-            '<dialog id="my_modal_3" class="modal" open>',
-            '<div class="modal-box">',
-            '<form method="dialog">',
-            '<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" id="close_mode_selection_dalog">✕</button>',
-            '</form>',
-            '<h3 class="text-lg font-bold">Hello!</h3>',
+            '<div class="modal fade" id="my_modal_3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">',
+            '<div class="modal-dialog">',
+            '<div class="modal-content">',
+            '<div class="modal-header">',
+            '<h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>',
+            '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>',
+            '</div>',
+            '<div class="modal-body">',
             '<button class="btn btn-outline btn-info btn-wide" id="local_mode">本地图片</button>',
             '<button class="btn btn-outline btn-success btn-wide" id="image_host">远程图片</button>',
             '</div>',
-            '</dialog >',
+            '<div class="modal-footer">',
+            '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>',
+            '<button type="button" class="btn btn-primary">Save changes</button>',
+            '</div>',
+            '</div>',
+            '</div>',
+            '</div>'
         ].join('');
         // alert('ddd')
         let modeSelectionDialog = document.getElementById("my_modal_3");
@@ -133,6 +142,7 @@ class ImageHost {
             //binding image host button click ot handler
             const hostButton = document.getElementById('image_host');
             hostButton.addEventListener('click', this.#ImageHostModeHandler.bind(this));
+            this.#showOrHideModeSelectionDialog(true);
         } else {
             this.#showOrHideModeSelectionDialog(true);
         }
@@ -147,18 +157,31 @@ class ImageHost {
      * 初始化输入url对话框
      */
     #InitUrlInputDialog() {
-        const urlDialog = `
-        <dialog id="modal_url_input" class="modal hidden" open>
-            <div class="p-4 bg-gray-100 rounded-lg shadow-md flex flex-col">
-                <span class="block text-lg font-semibold text-gray-800 mb-4">input url</span>
-                
-                <label for="name" class="block text-sm font-medium text-gray-700">URL</label>
-                <input type="text" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" id="url_input"
-                    placeholder="Enter the image url">
+        const urlDialog = 
+        `
+            <div class="modal fade" id="modal_url_input" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <span class="block text-lg font-semibold text-gray-800 mb-4">input url</span>
 
-                <button class="btn ml-1 btn-primary mt-4" id="submit_url">submit</button>
+                        <label for="name" class="block text-sm font-medium text-gray-700">URL</label>
+                        <input type="text" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" id="url_input"
+                        placeholder="Enter the image url">
+
+                        <button class="btn ml-1 btn-primary mt-4" id="submit_url">确认</button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                    </div>
+                </div>
             </div>
-        </dialog>
         `;
         const dialogContainer = document.createElement('div');
         this.quillLocal.container.appendChild(dialogContainer);
@@ -170,9 +193,14 @@ class ImageHost {
     }
     #showOrHideModeSelectionDialog(show) {
         if (show === true) {
-            document.getElementById('my_modal_3').classList.remove('hidden');
+            // document.getElementById('my_modal_3').classList.remove('hidden');
+            var myModal = new bootstrap.Modal(document.getElementById('my_modal_3'));
+            myModal.show();
         } else {
-            document.getElementById('my_modal_3').classList.add('hidden');
+            // document.getElementById('my_modal_3').classList.add('hidden');
+
+            var myModal = new bootstrap.Modal(document.getElementById('my_modal_3'));
+            myModal.hide();
         }
     }
     #ShowOrHideUrlInputDialog(control) {
