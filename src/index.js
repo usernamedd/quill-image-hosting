@@ -115,9 +115,8 @@ class ImageHost {
             '<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" id="close_mode_selection_dalog">✕</button>',
             '</form>',
             '<h3 class="text-lg font-bold">Hello!</h3>',
-            '<p class="py-4">Press ESC key or click on ✕ button to close</p>',
-            '<button class="btn btn-outline btn-info btn-wide" id="local_mode">Info</button>',
-            '<button class="btn btn-outline btn-success btn-wide" id="image_host">Success</button>',
+            '<button class="btn btn-outline btn-info btn-wide" id="local_mode">本地图片</button>',
+            '<button class="btn btn-outline btn-success btn-wide" id="image_host">远程图片</button>',
             '</div>',
             '</dialog >',
         ].join('');
