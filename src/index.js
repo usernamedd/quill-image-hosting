@@ -28,12 +28,13 @@ class ImageHost {
     option_Local;
     url;
     my_modal_3;
+    isUrlModalInitalized;
     modal_url_input;//图片URL输入对话框
     constructor(quill, option) {
         this.quillLocal = quill;
         this.optionLocal = option;
         this.#replaceImageHandler();
-        this.#InitUrlInputDialog();
+        isUrlModalInitalized=false;
     }
     #replaceImageHandler() {
         const toolbar = this.quillLocal.getModule('toolbar');
@@ -110,6 +111,8 @@ class ImageHost {
         // this.quillLocal.insertEmbed(range.index, 'image', value, Quill.sources.USER);
     }
     #createModeDialog() {
+        //创建url对话框
+        this.#InitUrlInputDialog();
         const modeDialog = [
             '<div class="modal fade" id="my_modal_3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">',
             '<div class="modal-dialog">',
@@ -159,6 +162,9 @@ class ImageHost {
      * 初始化输入url对话框
      */
     #InitUrlInputDialog() {
+        if(isUrlModalInitalized){
+            return;
+        }
         const urlDialog = 
         `
             <div class="modal fade" id="modal_url_input" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -194,6 +200,7 @@ class ImageHost {
         document.getElementById('url_input').addEventListener("input", (e) => { self.#urlInputChangedHandler(e); });
         //cache
         modal_url_input=new bootstrap.Modal(document.getElementById('modal_url_input'));
+        isUrlModalInitalized=true;
     }
     #showOrHideModeSelectionDialog(show) {
         if (show === true) {
