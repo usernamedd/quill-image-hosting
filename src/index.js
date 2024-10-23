@@ -142,6 +142,7 @@ class ImageHost {
             //binding image host button click ot handler
             const hostButton = document.getElementById('image_host');
             hostButton.addEventListener('click', this.#ImageHostModeHandler.bind(this));
+            my_modal_3=new bootstrap.Modal(document.getElementById('my_modal_3'));//cache it
             this.#showOrHideModeSelectionDialog(true);
         } else {
             this.#showOrHideModeSelectionDialog(true);
@@ -193,14 +194,9 @@ class ImageHost {
     }
     #showOrHideModeSelectionDialog(show) {
         if (show === true) {
-            // document.getElementById('my_modal_3').classList.remove('hidden');
-            var myModal = new bootstrap.Modal(document.getElementById('my_modal_3'));
-            myModal.show();
+            my_modal_3.show();
         } else {
-            // document.getElementById('my_modal_3').classList.add('hidden');
-
-            var myModal = new bootstrap.Modal(document.getElementById('my_modal_3'));
-            myModal.hide();
+            my_modal_3.hide();
         }
     }
     #ShowOrHideUrlInputDialog(control) {
