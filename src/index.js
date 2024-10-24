@@ -59,38 +59,18 @@ class ImageHost {
                 this.quillLocal.uploader.options.mimetypes.join(', '),
             );
             fileInput.classList.add('ql-image');
-            fileInput.addEventListener('change', () => {
+            fileInput.addEventListener('change', (e) => {
+                e.preventDefault();
                 const range = this.quillLocal.getSelection(true);
                 this.quillLocal.uploader.upload(range, fileInput.files);
 
                 fileInput.value = '';
-                this.#uploadLocalFiles(fileInput.files[0]);
-
             });
             this.quillLocal.container.appendChild(fileInput);
         }
         fileInput.click();
     }
-    async #uploadLocalFiles(file) {
-        const formData = new FormData();
-        formData.append('file', file);
 
-        try {
-            const response = await fetch('https://postimage.org/upload', {
-                method: 'GET',
-                // body: formData,
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const data = await response.json();
-            document.getElementById('result').innerHTML = `<a href="${data.url}">Image uploaded! Click here to view.</a>`;
-        } catch (error) {
-            console.error('Error uploading image:', error);
-        }
-    }
     #ImageHostModeHandler(e) {
         e.preventDefault();
         this.#showOrHideModeSelectionDialog(false);
@@ -105,8 +85,7 @@ class ImageHost {
         let range = this.quillLocal.getSelection(true);
         let value = this.url;//prompt('What is the image URL');
         // let update = this.quillLocal.getContents().retain(range.index).delete(range.length).insert({value});
-        // this.quillLocal.updateContents(update, Quill.sources.USER);
-        this.quillLocal.insertEmbed(range.index, 'image', value, Quill.sources.USER);
+        this.quillLocal.updateContents(update, Quill.sources.USER);
         this.quillLocal.setSelection(
             range.index + 1,
             Quill.sources.USER,
