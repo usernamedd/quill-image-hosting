@@ -33,3 +33,5 @@ insert image from an image hosting or local file
     });
 </script>
 ```
+## 产品模式构建
+> webpack配置修改mode: "production"；删除掉devtool: 'inline-source-map',
